@@ -1,0 +1,43 @@
+
+ 	
+Configure DHCP ( Dynamic Host Configuration Protocol ) Server.
+[1]	Install and configure DHCP Server.
+dlp:~ # zypper -n install dhcp-server
+dlp:~ # vi /etc/sysconfig/dhcpd
+# line 15: specify intarface to listen DHCPD
+DHCPD_INTERFACE="eth0"
+dlp:~ # mv /etc/dhcpd.conf /etc/dhcpd.conf.org
+dlp:~ # vi /etc/dhcpd.conf
+# create new
+# specify domain name
+option domain-name     "srv.world";
+
+# specify DNS server's hostname or IP address
+option domain-name-servers     dlp.srv.world;
+
+# default lease time
+default-lease-time 600;
+
+# max lease time
+max-lease-time 7200;
+
+# this DHCP server to be declared valid
+authoritative;
+
+# specify network address and subnet mask
+subnet 10.0.0.0 netmask 255.255.255.0 {
+    # specify the range of lease IP address
+    range dynamic-bootp 10.0.0.200 10.0.0.254;
+    # specify broadcast address
+    option broadcast-address 10.0.0.255;
+    # specify default gateway
+    option routers 10.0.0.1;
+} 
+
+dlp:~ # systemctl start dhcpd
+dlp:~ # systemctl enable dhcpd
+[2]	If Firewalld is running, allow DHCP service. DHCP uses 67/UDP.
+dlp:~ # firewall-cmd --add-service=dhcp --permanent
+success
+dlp:~ # firewall-cmd --reload
+success

@@ -1,0 +1,9 @@
+#!/bin/bash
+service=servicename.service
+
+if systemctl is-active --quiet $service
+then
+echo "$service is active"
+else
+sudo systemctl start $service
+fi

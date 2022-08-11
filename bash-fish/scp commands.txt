@@ -1,0 +1,1 @@
+scp -vrC root@host:/path/to/directory . 2> copy.log &

@@ -1,0 +1,116 @@
+resize file system
+
+resize2fs <device>
+
+for openvpn server, 
+
+resize2fs /dev/sda
+
+
+
+EXAMPLES:
+
+Make a mount point:
+
+mkdir /mnt/share
+
+Then, mount your smb share:
+
+mount.cifs //192.168.0.6/sharename /mnt/share -o user=username
+
+It�ll prompt you for a password (you want to stay away from typing passwords within commands when you can!)
+
+Verify it�s mounted by using the mount command:
+
+mount
+//192.168.0.6/sharename on /mnt/share type cifs (rw)
+
+Want to do it automagically at every boot? Add it to /etc/fstab:
+
+//192.168.0.6/share    /mnt/share        smbfs    username=rob,password=SuPeRdUpEr 0 0
+
+
+
+
+
+btrfs fi df
+
+btrfs fi usage -h
+
+du -chs
+
+df -h
+
+OpenSUSE
+
+unmounting USB disk:
+
+udisksctl power-off -b /dev/sdc
+
+sudo umount /dev/sdc2
+
+
+Firewall Add:
+
+machine:/mnt/ARCHIVE2OFFSITE> sudo firewall-cmd --get-default-zone
+public
+
+
+machine:/mnt/ARCHIVE2OFFSITE> sudo firewall-cmd --zone=public --add-port=2500-5000/tcp
+success
+
+machine:/mnt/ARCHIVE2OFFSITE> sudo firewall-cmd --runtime-to-permanent
+success
+
+machine:/mnt/ARCHIVE2OFFSITE> sudo firewall-cmd --reload
+success
+
+You can also manipulate FW rules using:
+
+sudo /usr/sbin/yast
+
+
+
+Samba Config
+
+machine:/mnt> sudo vim /etc/samba/smb.conf
+machine:/mnt> sudo smbpasswd -a sysadmin
+New SMB password:
+Retype new SMB password:
+Added user sysadmin.
+
+Manipulating Services
+
+machine:/mnt> systemctl start smb.service
+==== AUTHENTICATING FOR org.freedesktop.systemd1.manage-units ====
+Authentication is required to start 'smb.service'.
+Authenticating as: root
+Password:
+==== AUTHENTICATION COMPLETE ====
+machine:/mnt> systemctl list-units --type service
+
+
+Install GUI from Console (SLES 15.1)
+
+[1]	Install GNOME Desktop Environment on this example.
+# add extension modules first
+dlp:~ # SUSEConnect -p PackageHub/15.1/x86_64
+dlp:~ # SUSEConnect -p sle-module-desktop-applications/15.1/x86_64
+dlp:~ # zypper install gnome-shell
+[2]	After installing, change some settings and reboot.
+dlp:~ # vi /etc/sysconfig/windowmanager
+# line 22: change
+DEFAULT_WM="gnome"
+# change to graphical login
+dlp:~ # ln -fs /usr/lib/systemd/system/graphical.target /etc/systemd/system/default.target
+dlp:~ # reboot
+
+fstab location
+
+/etc/fstab
+
+machine:/etc> sudo vim fstab
+
+find device by UUID
+
+machine:/etc> blkid
